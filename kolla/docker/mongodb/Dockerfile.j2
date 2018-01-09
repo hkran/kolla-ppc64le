@@ -9,8 +9,7 @@ LABEL maintainer="{{ maintainer }}" name="{{ image_name }}" build-date="{{ build
 
 {% if base_distro in ['centos', 'oraclelinux', 'rhel'] %}
     {% set mongodb_packages = [
-            'mongodb',
-            'mongodb-server'
+            ''
     ] %}
 {% elif base_distro in ['debian', 'ubuntu'] %}
     {% set mongodb_packages = [
@@ -18,7 +17,38 @@ LABEL maintainer="{{ maintainer }}" name="{{ image_name }}" build-date="{{ build
     ] %}
 {% endif %}
 
-{{ macros.install_packages(mongodb_packages | customizable("packages")) }}
+#{{ macros.install_packages(mongodb_packages | customizable("packages")) }}
+COPY boost159-1.59.0-2.el7.1.ppc64le.rpm             /
+COPY boost159-graph-1.59.0-2.el7.1.ppc64le.rpm            /
+COPY boost159-serialization-1.59.0-2.el7.1.ppc64le.rpm /
+COPY boost159-atomic-1.59.0-2.el7.1.ppc64le.rpm      /
+COPY boost159-iostreams-1.59.0-2.el7.1.ppc64le.rpm        /
+COPY boost159-signals-1.59.0-2.el7.1.ppc64le.rpm /
+COPY boost159-chrono-1.59.0-2.el7.1.ppc64le.rpm      /
+COPY boost159-jam-1.59.0-2.el7.1.ppc64le.rpm              /
+COPY boost159-static-1.59.0-2.el7.1.ppc64le.rpm /
+COPY boost159-container-1.59.0-2.el7.1.ppc64le.rpm   /
+COPY boost159-locale-1.59.0-2.el7.1.ppc64le.rpm           /
+COPY boost159-system-1.59.0-2.el7.1.ppc64le.rpm /
+COPY boost159-context-1.59.0-2.el7.1.ppc64le.rpm     /
+COPY boost159-log-1.59.0-2.el7.1.ppc64le.rpm              /
+COPY boost159-test-1.59.0-2.el7.1.ppc64le.rpm /
+COPY boost159-coroutine-1.59.0-2.el7.1.ppc64le.rpm   /
+COPY boost159-math-1.59.0-2.el7.1.ppc64le.rpm             /
+COPY boost159-thread-1.59.0-2.el7.1.ppc64le.rpm /
+COPY boost159-date-time-1.59.0-2.el7.1.ppc64le.rpm   /
+COPY boost159-program-options-1.59.0-2.el7.1.ppc64le.rpm  /
+COPY boost159-timer-1.59.0-2.el7.1.ppc64le.rpm /
+COPY boost159-devel-1.59.0-2.el7.1.ppc64le.rpm       /
+COPY boost159-python-1.59.0-2.el7.1.ppc64le.rpm           /
+COPY boost159-wave-1.59.0-2.el7.1.ppc64le.rpm /
+COPY boost159-doctools-1.59.0-2.el7.1.ppc64le.rpm    /
+COPY boost159-random-1.59.0-2.el7.1.ppc64le.rpm           /
+COPY mongodb-3.2.8-3.el7.ppc64le.rpm /
+COPY boost159-filesystem-1.59.0-2.el7.1.ppc64le.rpm  /
+COPY boost159-regex-1.59.0-2.el7.1.ppc64le.rpm            /
+COPY mongodb-server-3.2.8-3.el7.ppc64le.rpm /
+RUN yum -y install /boost*.rpm /mongodb*.rpm
 
 COPY mongodb_sudoers /etc/sudoers.d/kolla_mongodb_sudoers
 COPY extend_start.sh /usr/local/bin/kolla_extend_start

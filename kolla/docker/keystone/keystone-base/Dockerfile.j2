@@ -47,9 +47,11 @@ RUN mkdir -p /var/www/cgi-bin/keystone \
             'httpd',
             'mod_ssl',
             'mod_wsgi',
-            'python-ldappool'
+            'openldap-devel',
+            'python-devel'
         ] %}
 {{ macros.install_packages(keystone_base_packages | customizable("packages")) }}
+RUN pip install python-ldap ldappool
 RUN sed -i -r 's,^(Listen 80),#\1,' /etc/httpd/conf/httpd.conf \
     && sed -i -r 's,^(Listen 443),#\1,' /etc/httpd/conf.d/ssl.conf
 

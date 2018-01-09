@@ -44,11 +44,14 @@ RUN mkdir -p /var/www/cgi-bin/aodh \
        {% set aodh_base_packages = [
             'httpd',
             'mod_wsgi',
-            'mod_ssl',
-            'python-ldappool'
+            'openldap-devel',
+            'python-devel',
+            'mod_ssl'
         ] %}
 
 {{ macros.install_packages(aodh_base_packages | customizable("packages")) }}
+RUN pip install python-ldap ldappool
+
 RUN mkdir -p /var/www/cgi-bin/aodh \
     && sed -i -r 's,^(Listen 80),#\1,' /etc/httpd/conf/httpd.conf \
     && sed -i -r 's,^(Listen 443),#\1,' /etc/httpd/conf.d/ssl.conf
