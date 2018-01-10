@@ -10,8 +10,7 @@ LABEL maintainer="{{ maintainer }}" name="{{ image_name }}" build-date="{{ build
 {% block rabbitmq_install %}
 {% if base_distro in ['centos', 'oraclelinux', 'rhel'] %}
     {% set rabbitmq_packages = [
-        'hostname',
-        'rabbitmq-server'
+        'hostname'
     ] %}
 
 {% elif base_distro in ['debian', 'ubuntu'] %}
@@ -25,6 +24,8 @@ LABEL maintainer="{{ maintainer }}" name="{{ image_name }}" build-date="{{ build
 {% endif %}
 
 {{ macros.install_packages(rabbitmq_packages | customizable("packages")) }}
+COPY rabbitmq-server-3.6.5-1.el7.noarch.rpm /
+RUN yum -y install /rabbitmq-server-3.6.5-1.el7.noarch.rpm
 
 {% endblock %}
 

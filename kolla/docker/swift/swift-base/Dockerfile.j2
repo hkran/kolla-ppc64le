@@ -28,8 +28,10 @@ LABEL maintainer="{{ maintainer }}" name="{{ image_name }}" build-date="{{ build
         {% set swift_base_packages = ['liberasurecode-dev'] %}
     {% endif %}
 
-{{ macros.install_packages(swift_base_packages | customizable("packages")) }}
-
+#{{ macros.install_packages(swift_base_packages | customizable("packages")) }}
+COPY liberasurecode-devel-1.5.0-1.el7.ppc64le.rpm  /
+COPY liberasurecode-1.5.0-1.el7.ppc64le.rpm /
+RUN yum -y install /libera*.rpm
 ADD swift-base-archive /swift-base-source
 
 {% set swift_base_pip_packages = [

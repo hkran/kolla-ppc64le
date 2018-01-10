@@ -36,7 +36,8 @@ RUN echo > /etc/apache2/ports.conf
             'httpd',
             'mod_ssl',
             'mod_wsgi',
-            'python-ldappool'
+            'openldap-devel',
+            'python-devel'
         ] %}
 {{ macros.install_packages(panko_base_packages | customizable("packages")) }}
 RUN sed -i -r 's,^(Listen 80),#\1,' /etc/httpd/conf/httpd.conf \
@@ -51,6 +52,7 @@ RUN sed -i -r 's,^(Listen 80),#\1,' /etc/httpd/conf/httpd.conf \
         ] %}
 
 {{ macros.install_packages(panko_base_packages | customizable("packages")) }}
+RUN pip install python-ldap ldappool
 RUN truncate -s 0 /etc/apache2/ports.conf
 
    {% endif %}

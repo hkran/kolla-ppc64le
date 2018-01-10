@@ -1,6 +1,8 @@
 FROM {{ namespace }}/{{ image_prefix }}base:{{ tag }}
 LABEL maintainer="{{ maintainer }}" name="{{ image_name }}" build-date="{{ build_date }}"
-
+#
+#        'ceph',
+#        'ceph-radosgw',
 {% block ceph_base_header %}{% endblock %}
 
 {% import "macros.j2" as macros with context %}
@@ -11,11 +13,10 @@ LABEL maintainer="{{ maintainer }}" name="{{ image_name }}" build-date="{{ build
 
    {% set ceph_base_packages = [
         'btrfs-progs',
-        'ceph',
-        'ceph-radosgw',
         'e2fsprogs',
         'hdparm',
         'parted',
+        'make',
         'xfsprogs'
     ] %}
 
@@ -45,6 +46,50 @@ LABEL maintainer="{{ maintainer }}" name="{{ image_name }}" build-date="{{ build
 
 {% endif %}
 {{ macros.install_packages(ceph_base_packages | customizable("packages")) }}
+COPY userspace-rcu-devel-0.10.0-3.el7.ppc64le.rpm /
+COPY userspace-rcu-0.10.0-3.el7.ppc64le.rpm /
+RUN yum -y install /userspace*.rpm
+RUN ldconfig
+RUN rm -f /userspace*.rpm
+COPY lttng-ust-2.10.0-1.el7.ppc64le.rpm        /
+COPY lttng-ust-devel-2.10.0-1.el7.ppc64le.rpm /
+RUN yum -y install /lttng*.rpm
+RUN rm -f /lttng*.rpm
+COPY ceph-12.2.1-0.el7.ppc64le.rpm          / 
+COPY ceph-fuse-12.2.1-0.el7.ppc64le.rpm   / 
+COPY ceph-mon-12.2.1-0.el7.ppc64le.rpm       / 
+COPY ceph-resource-agents-12.2.1-0.el7.ppc64le.rpm / 
+COPY ceph-base-12.2.1-0.el7.ppc64le.rpm     / 
+COPY ceph-mds-12.2.1-0.el7.ppc64le.rpm    / 
+COPY ceph-osd-12.2.1-0.el7.ppc64le.rpm       / 
+COPY ceph-selinux-12.2.1-0.el7.ppc64le.rpm / 
+COPY ceph-common-12.2.1-0.el7.ppc64le.rpm   / 
+COPY ceph-mgr-12.2.1-0.el7.ppc64le.rpm    / 
+COPY ceph-radosgw-12.2.1-0.el7.ppc64le.rpm   / 
+COPY ceph-test-12.2.1-0.el7.ppc64le.rpm / 
+COPY cephfs-java-12.2.1-0.el7.ppc64le.rpm             /
+COPY librbd1-12.2.1-0.el7.ppc64le.rpm              /
+COPY python-rbd-12.2.1-0.el7.ppc64le.rpm /
+COPY libcephfs_jni1-12.2.1-0.el7.ppc64le.rpm          /
+COPY librbd-devel-12.2.1-0.el7.ppc64le.rpm         /
+COPY python-rgw-12.2.1-0.el7.ppc64le.rpm /
+COPY libcephfs_jni-devel-12.2.1-0.el7.ppc64le.rpm     /
+COPY librgw2-12.2.1-0.el7.ppc64le.rpm              /
+COPY rados-objclass-devel-12.2.1-0.el7.ppc64le.rpm /
+COPY librados2-12.2.1-0.el7.ppc64le.rpm               /
+COPY librgw-devel-12.2.1-0.el7.ppc64le.rpm         /
+COPY rbd-fuse-12.2.1-0.el7.ppc64le.rpm /
+COPY librados-devel-12.2.1-0.el7.ppc64le.rpm          /
+COPY python-ceph-compat-12.2.1-0.el7.ppc64le.rpm   /
+COPY rbd-mirror-12.2.1-0.el7.ppc64le.rpm /
+COPY libradosstriper1-12.2.1-0.el7.ppc64le.rpm        /
+COPY python-cephfs-12.2.1-0.el7.ppc64le.rpm        /
+COPY rbd-nbd-12.2.1-0.el7.ppc64le.rpm /
+COPY libradosstriper-devel-12.2.1-0.el7.ppc64le.rpm   /
+COPY python-rados-12.2.1-0.el7.ppc64le.rpm /
+COPY libcephfs2-12.2.1-0.el7.ppc64le.rpm /
+RUN yum -y install /*.rpm
+RUN rm -f /*.rpm
 
 COPY extend_start.sh /usr/local/bin/kolla_extend_start
 RUN chmod 755 /usr/local/bin/kolla_extend_start
